@@ -8,7 +8,6 @@ FINANCIAL_DATA = {
     "company_name": "Tesla, Inc.",
     "ticker": "TSLA (NASDAQ)",
     "ipo_date": "June 29, 2010 ($17/share)",
-    
     "annual_ratios": {
         "2010 (IPO)": {"pe": "N/A (Loss)", "ps": "25.4x", "pb": "8.2x", "roe": "-42.1%"},
         "2012":       {"pe": "N/A (Loss)", "ps": "11.2x", "pb": "14.1x", "roe": "-78.5%"},
@@ -21,7 +20,6 @@ FINANCIAL_DATA = {
         "2024":       {"pe": "112.5x",    "ps": "8.9x",  "pb": "10.8x", "roe": "11.2%"},
         "2025":       {"pe": "135.2x",    "ps": "9.8x",  "pb": "11.4x", "roe": "12.8%"}
     },
-
     "annual_matrix": {
         "2010 (IPO)":  {"revenue": "$116.7M", "net_income": "-$154.3M", "cash_flow": "-$128.0M", "margin": "-132.2%"},
         "2012":        {"revenue": "$413.3M", "net_income": "-$396.2M", "cash_flow": "-$266.0M", "margin": "-95.8%"},
@@ -34,7 +32,6 @@ FINANCIAL_DATA = {
         "2024":        {"revenue": "$97.69B", "net_income": "+$7.12B",  "cash_flow": "+$14.85B", "margin": "7.28%"},
         "2025":        {"revenue": "$94.83B", "net_income": "+$3.81B",  "cash_flow": "+$14.75B", "margin": "4.01%"}
     },
-
     "balance_sheet": {
         "Total Assets": "$122.07 Billion",
         "Cash & Equivalents": "$36.56 Billion",
@@ -42,7 +39,6 @@ FINANCIAL_DATA = {
         "Net Cash Position": "$28.18 Billion (Positive)",
         "Stockholders Equity": "$73.68 Billion"
     },
-
     "segments": {
         "Automotive Sales & Leasing": "83.5%",
         "Energy Storage & Solar": "8.5%",
@@ -77,38 +73,29 @@ def format_annual_matrix(metric_key=None, metric_label=None) -> str:
 
 def contextual_chatbot(user_query: str, chat_history: list) -> str:
     query = user_query.strip().lower()
-
+    
     if ("ratio" in query or "pe" in query or "p/e" in query or "valuation" in query) and ("year" in query or "annual" in query or "history" in query or "trend" in query):
         if "pe" in query or "p/e" in query:
             return format_yearwise_ratios("pe")
         return format_yearwise_ratios("all")
-
     elif "pe ratio" in query or "p/e ratio" in query or "pe" in query:
         return format_yearwise_ratios("pe")
-
     elif ("profit" in query or "net income" in query or "income" in query or "earning" in query) and ("year" in query or "annual" in query or "history" in query):
         return format_annual_matrix("net_income", "Net Income / Profit")
-
     elif ("revenue" in query or "sales" in query) and ("year" in query or "annual" in query or "history" in query):
         return format_annual_matrix("revenue", "Revenue")
-
     elif ("cash flow" in query or "cashflow" in query) and ("year" in query or "annual" in query or "history" in query):
         return format_annual_matrix("cash_flow", "Operating Cash Flow")
-
     elif "matrix" in query or "all metrics" in query or "full" in query or "financial" in query:
         return format_annual_matrix()
-
     elif "balance sheet" in query or "asset" in query or "debt" in query or "equity" in query:
         bs_str = "<br>".join([f"• <b style='color:#94a3b8;'>{k}</b>: <b style='color:#38bdf8;'>{v}</b>" for k, v in FINANCIAL_DATA["balance_sheet"].items()])
         return f"<div style='color:#38bdf8; font-weight:700; margin-bottom:8px;'>🏛️ Tesla Balance Sheet Highlights:</div>{bs_str}"
-
     elif "segment" in query or "breakdown" in query:
         seg_str = "<br>".join([f"• <b style='color:#94a3b8;'>{k}</b>: <b style='color:#4ade80;'>{v}</b>" for k, v in FINANCIAL_DATA["segments"].items()])
         return f"<div style='color:#38bdf8; font-weight:700; margin-bottom:8px;'>⚡ Revenue Breakdown:</div>{seg_str}"
-
     elif "list" in query or "ipo" in query or "nasdaq" in query:
         return f"Tesla listed on NASDAQ on <b style='color:#38bdf8;'>{FINANCIAL_DATA['ipo_date']}</b> under ticker <b style='color:#e82127;'>{FINANCIAL_DATA['ticker']}</b>."
-
     else:
         return (
             "I couldn't recognize that exact prompt. Select a quick prompt below or ask:<br>"
@@ -134,9 +121,12 @@ HTML_TEMPLATE = """
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
         html, body {
             background-color: var(--bg-color);
             color: var(--text-primary);
@@ -144,14 +134,12 @@ HTML_TEMPLATE = """
             width: 100%;
             overflow: hidden;
         }
-
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 12px;
         }
-
         .chat-container {
             width: 100%;
             max-width: 680px;
@@ -165,7 +153,6 @@ HTML_TEMPLATE = """
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             overflow: hidden;
         }
-
         /* Header */
         .chat-header {
             background: rgba(15, 23, 42, 0.9);
@@ -176,11 +163,30 @@ HTML_TEMPLATE = """
             justify-content: space-between;
             flex-shrink: 0;
         }
-        .header-brand { display: flex; align-items: center; gap: 8px; }
-        .logo-icon { font-size: 1.2rem; color: var(--accent-red); font-weight: 900; }
-        .bot-title { font-size: 0.98rem; font-weight: 700; letter-spacing: 0.3px; }
-        .ticker-pill { background: rgba(232, 33, 39, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red); font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; }
-
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo-icon {
+            font-size: 1.2rem;
+            color: var(--accent-red);
+            font-weight: 900;
+        }
+        .bot-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .ticker-pill {
+            background: rgba(232, 33, 39, 0.15);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
         /* Chat Body */
         .chat-box {
             flex: 1;
@@ -191,7 +197,6 @@ HTML_TEMPLATE = """
             gap: 12px;
             -webkit-overflow-scrolling: touch;
         }
-
         .message {
             max-width: 88%;
             padding: 12px 16px;
@@ -213,7 +218,6 @@ HTML_TEMPLATE = """
             border: 1px solid var(--card-border);
             border-bottom-left-radius: 4px;
         }
-
         /* Horizontal Scrollable Presets on Mobile */
         .presets {
             padding: 10px 14px;
@@ -227,8 +231,9 @@ HTML_TEMPLATE = """
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
-        .presets::-webkit-scrollbar { display: none; }
-        
+        .presets::-webkit-scrollbar {
+            display: none;
+        }
         .preset-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--card-border);
@@ -246,7 +251,6 @@ HTML_TEMPLATE = """
             color: #ffffff;
             border-color: var(--accent-red);
         }
-
         /* Input Area */
         .input-area {
             display: flex;
@@ -266,7 +270,9 @@ HTML_TEMPLATE = """
             outline: none;
             font-size: 0.88rem;
         }
-        .input-area input:focus { border-color: var(--accent-cyan); }
+        .input-area input:focus {
+            border-color: var(--accent-cyan);
+        }
         .input-area button {
             background: var(--accent-red);
             color: #ffffff;
@@ -278,7 +284,6 @@ HTML_TEMPLATE = """
             font-size: 0.85rem;
             flex-shrink: 0;
         }
-
         /* Mobile Optimization Fixes */
         @media (max-width: 600px) {
             body { padding: 0; }
@@ -296,70 +301,24 @@ HTML_TEMPLATE = """
             </div>
             <span class="ticker-pill">TSLA</span>
         </div>
-
         <div class="chat-box" id="chat-box">
             <div class="message bot-message">
                 <b style="color:var(--accent-cyan);">Welcome to Tesla Financial Assistant 🏎️</b><br><br>
                 Ask questions about yearwise valuation ratios (P/E, P/S, P/B), revenue trends, net income history, or balance sheet metrics.
             </div>
         </div>
-
         <div class="presets">
             {% for query in presets %}
                 <button class="preset-btn" onclick="sendPreset('{{ query }}')">{{ query }}</button>
             {% endfor %}
         </div>
-
         <div class="input-area">
             <input type="text" id="user-input" placeholder="Ask about P/E ratio, profit..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
-
     <script>
         let chatHistory = [];
-
         function appendMessage(text, className) {
             const chatBox = document.getElementById('chat-box');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${className}`;
-            msgDiv.innerHTML = text;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const message = input.value.trim();
-            if (!message) return;
-
-            appendMessage(message, 'user-message');
-            input.value = '';
-
-            chatHistory.push({ role: 'user', text: message });
-
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, history: chatHistory })
-                });
-                const data = await response.json();
-                appendMessage(data.response, 'bot-message');
-                chatHistory.push({ role: 'bot', text: data.response });
-            } catch (error) {
-                appendMessage('Error retrieving response.', 'bot-message');
-            }
-        }
-
-        function sendPreset(text) {
-            document.getElementById('user-input').value = text;
-            sendMessage();
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') sendMessage();
-        }
-    </script>
-</body>
-</html>
+            const msgDiv = document.createElement('
