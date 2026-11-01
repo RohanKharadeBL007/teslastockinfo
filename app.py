@@ -104,7 +104,7 @@ def contextual_chatbot(user_query: str, chat_history: list) -> str:
             "• <b>Show full financial matrix</b>"
         )
 
-HTML_TEMPLATE = """
+HTML_TEMPLATE = "<!DOCTYPE html><html><body><h1>Tesla Assistant</h1></body></html>"
 <!DOCTYPE html>
 <html lang="en">
 <head>
